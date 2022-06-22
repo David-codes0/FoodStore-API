@@ -4,28 +4,28 @@
  
  const multer = require('multer');
 // const checkAuth = require('../middleware/check-auth');
-//  const storage = multer.diskStorage({
-//   destination: (req,file,cb) => {
-//     cb(null, './uploads');
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, Date.now() + file.originalname);
-//   }
-//  });
-// const fileFilter = (req,file,cb) => {
-//   if (file.mimetype === 'image/jpeg'  || file.mimetype === 'image/png' ){
-//     cb(null, true);
-//   }else{
-//     cb(null,false);
-//   }
-// }
-//  const upload = multer({
-//   storage: storage,
-//   limit: {
-//     fileSize: 1024 * 1024 * 5
-//   },
+ const storage = multer.diskStorage({
+  destination: (req,file,cb) => {
+    cb(null, './uploads');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + file.originalname);
+  }
+ });
+const fileFilter = (req,file,cb) => {
+  if (file.mimetype === 'image/jpeg'  || file.mimetype === 'image/png' ){
+    cb(null, true);
+  }else{
+    cb(null,false);
+  }
+}
+ const upload = multer({
+  storage: storage,
+  limit: {
+    fileSize: 1024 * 1024 * 5
+  },
 
-// });
+});
 const Product = require('../models/product');
  
 
@@ -58,14 +58,14 @@ const Product = require('../models/product');
     });
   })
  });
- router.post('/',/*upload.single('productImage')*/  (req, res, next) => {
+ router.post('/',upload.single('productImage') , (req, res, next) => {
     console.log(req.file);
  
     const product = new Product({
       _id: new mongoose.Types.ObjectId(),
       foodname: req.body.foodname,
       price: req.body.price,
-      // productImage: req.file.path 
+      productImage: req.file.path 
     });
     product
     .save()
@@ -83,7 +83,6 @@ const Product = require('../models/product');
         })
         
        })
-  
     .catch(err => {
       console.log(err);
       res.status(501).json({
@@ -122,7 +121,18 @@ const Product = require('../models/product');
 
     });
   })
-   
+    // if(id === 'special'){
+    // res.status(200).json({
+    //  message: 'You discovered the special ID',
+    //  id: id
+    // });
+    // } else {
+    // res.status(200).json({
+    //     message: 'You passsed an ID',
+    //     id: id
+    //    });
+    // }
+ 
   router.patch('/:productId',(req, res, next) => {
     const id = req.params.productId; 
     const updateOps = {};
