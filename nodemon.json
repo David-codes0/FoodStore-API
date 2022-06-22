@@ -1,4 +1,6 @@
-// {
-//     "env": {
-//         "MONGO_ATLAS_PW" : "adebayo17108",
-//         "JWT_KEY" : "adebayo1710
+{
+    "env": {
+        "MONGO_ATLAS_PW" : "foodapi17108",
+        "JWT_KEY" : "adebayo17108"
+    }
+}
